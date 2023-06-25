@@ -11,16 +11,20 @@ private:
 
 protected:
     virtual void loadFromFile(std::string path);
+    virtual void RLE8_Compress();
 
 public:
-    virtual int getPixel(Vec2& pos);
+    virtual void getPixel(Vec2& pos, RGB& out);
+
     Bitmap(std::string filePath)
     {
-        loadFromFile(filePath);
-    }
-
-    ~Bitmap()
-    {
-        if(data) delete data;
+        try
+        {
+            loadFromFile(filePath);
+        }
+        catch (const char* msg)
+        {
+            std::cerr << msg << '\n';
+        }
     }
 };

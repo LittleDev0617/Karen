@@ -4,16 +4,17 @@
 #include "../Utils.h"
 #include <windows.h>
 #define DEFAULT_BACKGROUND COLOR_BLACK
+#define COLOR_TRANSPARENT COLOR_MAGENTA
 
 class ScreenRenderer
 {
 private:
-    static char colorTable[16];
     static void SetScreenSize(Vec2 pos);
     static void SetBufferSize(Vec2 pos);
     static void SetFontSize(int size);
-    static void GotoXY(Vec2 pos);
 public:
+static char colorTable[16];
+static void GotoXY(Vec2 pos);
     enum Color
     {
         COLOR_BLACK,
@@ -30,7 +31,8 @@ public:
         COLOR_YELLOW,
         COLOR_BLUE,
         COLOR_MAGENTA,
-        COLOR_CYAN
+        COLOR_CYAN,
+        COLOR_WHITE
     };
     
     static void InitScreen(int fontSize, int width, int height);

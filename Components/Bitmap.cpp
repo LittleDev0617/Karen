@@ -2,12 +2,12 @@
 
 void Bitmap::loadFromFile(std::string path)
 {
-    std::fstream bitmapFile;
+    std::ifstream bitmapFile;
 
     if(ext(path) != "bmp")
         throw "file is not bmp.";
 
-    bitmapFile.open(path);
+    bitmapFile.open(path, std::ios_base::binary);
 
     if(!bitmapFile.is_open()) throw "file is not existed.";
     if(!(bitmapFile.get() == 'B' && bitmapFile.get() == 'M')) throw "file is not bmp.";
@@ -21,19 +21,83 @@ void Bitmap::loadFromFile(std::string path)
     bitmapFile.read((char*)&width, sizeof(4));
     bitmapFile.read((char*)&height, sizeof(4));
 
-    // 4bit * 8, 4 byte padding
-    padding = 8 - (width % 8); // (4 bits)
+    bitmapFile.seekg(2, std::ios_base::cur);
 
-    size = (width + padding) * height;
+    bitmapFile.read((char*)&bits, sizeof(2));
+
+    if (bits == 24)
+    {
+        padding = width % 4;
+        size = (width * 3 + padding) * height;
+    }
+    else if (bits == 4)
+    {
+        padding = 8 - (width % 8); // (4 bits)
+        size = (width + padding) * height;
+    }
+
+    //size = width * height;
+    //if(size >= 1024 * 100) throw "Too big";
+
     bitmapFile.seekg(dataOffset);
 
-    data = (unsigned char*) new unsigned char[size];
-    bitmapFile.read((char*)data, size);
+    rawData = new unsigned char[size];
+    bitmapFile.read((char*)rawData, size);
 
+    RLE8_Compress();
+    _isCompressed = true;
+    // bits = 
 }
 
-int Bitmap::getPixel(Vec2& pos)
+void Bitmap::RLE8_Compress()
 {
-    unsigned char d = data[(height - pos.y - 1) * (padding + width) / 2 + pos.x / 2];
-    return (pos.x % 2 ? d & 0xF : d >> 4);
+    if(!rawData) return;
+
+    Vec2 pos = { 0, 0 };
+    Pixel* buf = new Pixel[1024*1024];
+    RGB recent, color = { 0,0,0 };
+    int cnt = 0;
+    int j = 0, x;
+
+    for (int y = 0; y < getHeight(); y++, pos.y++)
+    {
+        x = pos.x = 0;
+        getPixel(pos, recent);
+        for (; x < getWidth(); x++, pos.x++)
+        {
+            getPixel(pos, color);
+
+            if(recent == color)
+                cnt++;
+            else
+            {
+            store:
+                buf[j].len = cnt;
+                buf[j++].rgb = recent;
+                
+                recent = color;
+                cnt = 1;
+            }
+            
+            if(cnt == 255) goto store;
+        }
+        
+        buf[j].len = cnt;
+        buf[j++].rgb = recent;
+        
+        recent = color;
+        cnt = 0;
+    }
+
+    compressedData = new Pixel[j];
+    std::memcpy(compressedData, buf, j * sizeof(Pixel));
+    delete buf;
+}
+
+void Bitmap::getPixel(Vec2& pos, RGB& out)
+{
+    RGB* p = reinterpret_cast<RGB*>(&rawData[(height - pos.y - 1) * (width * 3 + padding) + pos.x * 3]);
+    out.R = p->B;
+    out.G = p->G;
+    out.B = p->R;
 }

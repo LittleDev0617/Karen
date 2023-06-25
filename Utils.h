@@ -1,6 +1,31 @@
 #pragma once
 #include <string>
 
+struct RGB
+{
+	unsigned char R;
+	unsigned char G;
+	unsigned char B;
+
+	bool operator==(RGB& rgb)
+	{
+		return R == rgb.R && G == rgb.G && B == rgb.B;
+	}
+
+	void operator=(RGB& rgb)
+	{
+		R = rgb.R;
+		G = rgb.G;
+		B = rgb.B;
+	}
+};
+
+struct Pixel
+{
+	unsigned char len;
+	RGB rgb;
+};
+
 struct Vec2
 {
 	int x;
