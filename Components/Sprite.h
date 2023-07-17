@@ -27,7 +27,7 @@ public:
 	virtual void getPixel(Vec2& pos, RGB& out) {  };
 	unsigned int getWidth() { return width; };
 	unsigned int getHeight() { return height; };
-	unsigned char* geRawData() { return rawData; };
+	unsigned char* getRawData() { return rawData; };
 	Pixel* getCompressedData() { return compressedData; };
 	unsigned int getSize() { return size; };
 	bool isCompressed() { return _isCompressed; };

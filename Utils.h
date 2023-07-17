@@ -31,10 +31,24 @@ struct Vec2
 	int x;
 	int y;
 
-	Vec2& operator+(const Vec2& v2)
+	Vec2 operator+(const Vec2& v2)
 	{
-		x += v2.x;
-		y += v2.y;
+		Vec2 tmp = *this;
+		tmp.x += v2.x;
+		tmp.y += v2.y;
+		return tmp;
+	}
+
+	void operator=(Vec2& v)
+	{
+		x = v.x;
+		y = v.y;
+	}
+
+	void operator+=(Vec2& v)
+	{
+		x += v.x;
+		y += v.y;
 	}
 };
 

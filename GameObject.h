@@ -1,10 +1,39 @@
 #pragma once
-#include "./Components/Component.h"
 #include "./Components/Bitmap.h"
 #include "./Components/Sprite.h"
 #include "./Components/Render.h"
 #include "Utils.h"
 #include <vector>
+
+class GameObject;
+
+class Component
+{
+protected:
+    GameObject* gameObject;
+    virtual std::string getName() { return "Component"; };
+public:
+    Component(GameObject* gameObject) : gameObject(gameObject) {}
+};
+
+class SpriteRenderer2D : public Component
+{
+private:
+    Sprite* sprite;
+
+public:
+    SpriteRenderer2D(GameObject* parent, Sprite* sprite) : Component(parent), sprite(sprite)
+    {
+    }
+
+    ~SpriteRenderer2D()
+    {
+        delete sprite;
+    }
+
+    void Render();
+    void SetSprite(Sprite* sprite);
+};
 
 class GameObject
 {
@@ -32,7 +61,7 @@ public:
         }
         
     }
-
+    
     template <class T> T* GetComponent()
     {
         T* com = 0;
@@ -44,4 +73,8 @@ public:
         return nullptr;
     }
 
+    void Translate(Vec2 vec)
+    {
+        pos += vec;
+    }
 };

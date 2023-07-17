@@ -1,5 +1,4 @@
 #pragma once
-#include "Component.h"
 #include "Sprite.h"
 #include "../Utils.h"
 #include <windows.h>
@@ -37,23 +36,4 @@ static void GotoXY(Vec2 pos);
     
     static void InitScreen(int fontSize, int width, int height);
     static void SetPixel(Vec2& pos, Color color);
-};
-
-class SpriteRenderer2D : public Component
-{
-private:
-    Sprite* sprite;
-
-public:
-    SpriteRenderer2D(GameObject* parent, Sprite* sprite) : Component(parent), sprite(sprite)
-    {
-    }
-
-    ~SpriteRenderer2D()
-    {
-        delete sprite;
-    }
-
-    void Render();
-    void SetSprite(Sprite* sprite);
 };
