@@ -12,6 +12,13 @@ void Bitmap::loadFromFile(std::string path)
     if(!bitmapFile.is_open()) throw "file is not existed.";
     if(!(bitmapFile.get() == 'B' && bitmapFile.get() == 'M')) throw "file is not bmp.";
 
+    readBitmapInfo();
+    RLE8_Compress();
+    // bits = 
+}
+
+void Bitmap::readBitmapInfo(std::ifstream bitmapFile)
+{
     // go to header.data_offset
     bitmapFile.seekg(10);
     unsigned int dataOffset = 0;
@@ -43,10 +50,6 @@ void Bitmap::loadFromFile(std::string path)
 
     rawData = new unsigned char[size];
     bitmapFile.read((char*)rawData, size);
-
-    RLE8_Compress();
-    _isCompressed = true;
-    // bits = 
 }
 
 void Bitmap::RLE8_Compress()
@@ -92,6 +95,7 @@ void Bitmap::RLE8_Compress()
     compressedData = new Pixel[j];
     std::memcpy(compressedData, buf, j * sizeof(Pixel));
     delete buf;
+    _isCompressed = true;
 }
 
 void Bitmap::getPixel(Vec2& pos, RGB& out)

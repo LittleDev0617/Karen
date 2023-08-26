@@ -12,6 +12,7 @@ private:
 protected:
     virtual void loadFromFile(std::string path);
     virtual void RLE8_Compress();
+    virtual void readBitmapInfo(std::ifstream bitmapFile);
 
 public:
     virtual void getPixel(Vec2& pos, RGB& out);

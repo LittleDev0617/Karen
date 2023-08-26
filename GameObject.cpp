@@ -14,6 +14,7 @@ void SpriteRenderer2D::Render()
         p = sprite->getCompressedData();
         for (; pos.y < h; pos.y++)
         {
+            s = "";
             ScreenRenderer::GotoXY(gameObject->getPos() + Vec2 { 0, pos.y });
             for (int x = 0; x < w;)
             {
@@ -24,7 +25,7 @@ void SpriteRenderer2D::Render()
                 x += p->len;
                 p++;
             }
-            //fprintf(stdout, s.c_str());
+            printf(s.c_str());
             //printf("\n");
             //s += "\n";
         }

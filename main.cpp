@@ -10,8 +10,8 @@ int main()
 
     GameObject obj1;
     
-    obj1.GetComponent<SpriteRenderer2D>()->SetSprite(new Bitmap("test5.bmp"));
-    //obj1.GetComponent<SpriteRenderer2D>()->SetSprite(new Bitmap("sprites/Knight_1/Protect2.bmp"));
+    //obj1.GetComponent<SpriteRenderer2D>()->SetSprite(new Bitmap("test5.bmp"));
+    obj1.GetComponent<SpriteRenderer2D>()->SetSprite(new Bitmap("sprites/Knight_1/Protect2.bmp"));
     //obj1.GetComponent<SpriteRenderer2D>()->SetSprite(new Bitmap("Resources/defaultSprite24.bmp"));
 
     obj1.GetComponent<SpriteRenderer2D>()->Render();
